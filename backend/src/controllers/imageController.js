@@ -5,43 +5,39 @@ const imageProcessingService = require('../services/imageProcessingService');
 const uploadDir = path.join(__dirname, '../../public/uploads');
 const downloadDir = path.join(__dirname, '../../public/downloads');
 
+let currentImagePath = ''; // Variable to store the current image path
+
 const imageController = {
   getUploadPath: (req, res) => {
-    // Generate a unique filename for the uploaded image
     const filename = `image_${Date.now()}.jpg`;
     const imagePath = path.join(uploadDir, filename);
 
-    // Respond with the generated upload path and filename
+    // Save the current image path for later processing
+    currentImagePath = imagePath;
+
     res.json({ uploadPath: imagePath, filename });
   },
 
-  getUploadedImage: (req, res) => {
-    const { filename } = req.query;
-
-    if (!filename) {
-      return res.status(400).json({ error: 'Filename parameter is required' });
+  performProcessing: (req, res) => {
+    if (!currentImagePath) {
+      return res.status(400).json({ error: 'No image path found for processing' });
     }
 
-    const imagePath = path.join(uploadDir, filename);
+    // Perform necessary image processing
+    const processedImagePath = path.join(downloadDir, `processed_${Date.now()}.jpg`);
+    const width = 300;
+    const height = 200;
 
-    if (fs.existsSync(imagePath)) {
-      // Perform necessary image processing (resize, filter, etc.)
-      const processedImagePath = path.join(downloadDir, `processed_${filename}`);
-      const width = 300;
-      const height = 200;
-
-      imageProcessingService.resizeImage(imagePath, processedImagePath, width, height)
-        .then(() => {
-          console.log('Image processed successfully.');
-          res.json({ processedImagePath, filename });
-        })
-        .catch((error) => {
-          console.error('Error processing image:', error);
-          res.status(500).json({ error: 'Error processing image' });
-        });
-    } else {
-      res.status(404).json({ error: 'Image not found' });
-    }
+    imageProcessingService.resizeImage(currentImagePath, processedImagePath, width, height)
+      .then(() => {
+        console.log('Image processed successfully.');
+        currentImagePath = ''; // Reset the current image path after processing
+        res.json({ status: 'OK' });
+      })
+      .catch((error) => {
+        console.error('Error processing image:', error);
+        res.status(500).json({ error: 'Error processing image' });
+      });
   },
 
   getDownloadPath: (req, res) => {
