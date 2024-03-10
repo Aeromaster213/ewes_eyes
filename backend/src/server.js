@@ -31,7 +31,7 @@ const port = process.env.PORT || 5000; // setting port number
 
 /** using CORS to connect to port 3000 on which Frontend is running */
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: 'http://localhost:3001'
 }));
 app.use(express.json());
 

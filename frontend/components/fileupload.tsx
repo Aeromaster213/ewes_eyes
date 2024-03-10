@@ -1,5 +1,5 @@
-"use client"
-import React from "react";
+// components/Fileupload.tsx
+import React, { useState } from "react";
 import { useDropzone } from 'react-dropzone';
 import { Inbox } from "lucide-react"
 
@@ -7,8 +7,8 @@ const Fileupload = () => {
     const { getRootProps, getInputProps } = useDropzone({
         maxFiles: 1,
         accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.svg'] },
-        onDrop: (acceptedFiles) => {
-            console.log(acceptedFiles);
+        onDrop: async (acceptedFiles) => {
+            console.log(acceptedFiles, " files")
         }
     });
     return (

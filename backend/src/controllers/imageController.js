@@ -1,3 +1,4 @@
+// imageController.js
 const path = require('path');
 const fs = require('fs');
 const imageProcessingService = require('../services/imageProcessingService');
@@ -48,7 +49,7 @@ const imageController = {
     }
 
     const downloadPath = path.join(downloadDir, `processed_${filename}`);
-
+    
     if (fs.existsSync(downloadPath)) {
       res.json({ downloadPath, filename });
     } else {

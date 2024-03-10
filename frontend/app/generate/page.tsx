@@ -15,7 +15,6 @@ export default function Gen() {
                         Upload an image to give our AI an idea of what you are looking for in terms of theming and colours
                     </p>
                     <Fileupload />
-                    <Button className="mt-10 bg-theme-blue hover:bg-theme-purple" >Continue without an image</Button>
                 </div>
             </div>
         </div>
