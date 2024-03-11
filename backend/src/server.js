@@ -28,10 +28,11 @@ else{
 // Initializing variables
 const app = express(); // creating instance of express app
 const port = process.env.PORT || 5000; // setting port number 
+const frontendPort = process.env.FRONTEND_PORT || 3000; // setting frontend port number
 
 /** using CORS to connect to port 3000 on which Frontend is running */
 app.use(cors({
-  origin: 'http://localhost:3001'
+  origin: `http://localhost:${frontendPort}`
 }));
 app.use(express.json());
 
