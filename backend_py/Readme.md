@@ -20,3 +20,7 @@ To run this code, you will need to install the following dependencies:
     ```
 
 Once you have installed these dependencies, you can run the code using the following command:
+```
+sudo docker compose build
+sudo docker compose up
+```
