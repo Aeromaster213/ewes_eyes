@@ -21,8 +21,7 @@ Welcome to Ewes Eyes, a software project designed to generate energy-efficient U
 ## Installation
 
 1. Clone this repository to your local machine.
+   ```sh
+  git clone https://github.com/Aeromaster213/ewes_eyes.git 
 
-'''
-git clone https://github.com/Aeromaster213/ewes_eyes.git 
-'''
 2. 
