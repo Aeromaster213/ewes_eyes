@@ -4,7 +4,7 @@ import os
 import time
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
-from services import image_processing_service
+from src.services import image_processing_service
 
 upload_dir = os.path.join(os.path.dirname(__file__), '../../public/uploads')
 download_dir = os.path.join(os.path.dirname(__file__), '../../public/downloads')

@@ -1,7 +1,7 @@
 # image_routes.py
 
 from fastapi import APIRouter
-from controllers import image_controller  # Import your image controller
+from src.controllers import image_controller  # Import your image controller
 
 router = APIRouter()
 
