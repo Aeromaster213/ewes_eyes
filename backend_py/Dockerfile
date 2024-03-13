@@ -7,7 +7,7 @@ RUN pip install --upgrade pip
 WORKDIR /app
 
 COPY ./requirements.txt /app
-RUN pip install -r /app/requirements.txt
+RUN pip install --upgrade -r /app/requirements.txt
 
 #RUN jupyter nbextension enable --py widgetsnbextension
 
