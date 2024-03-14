@@ -24,4 +24,9 @@ Welcome to Ewes Eyes, a software project designed to generate energy-efficient U
 ~~~
 git clone https://github.com/Aeromaster213/ewes_eyes.git 
 ~~~
-3. 
+2. Move to the backend_py folder and build & run the docker image.
+~~~
+sudo docker compose build
+sudo docker compose up
+~~~
+3. Load the frontend
