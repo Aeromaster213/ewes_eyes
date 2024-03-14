@@ -9,22 +9,15 @@ export default function Gen() {
 
     const questions = [
         {
-            component: <div className="flex-col items-center text-center ">
-                <div className="flex items-center">
-                    <h1 className="mr-3 text-5xl font-semibold">Upload a Reference Image</h1>
-                </div>
-                <p className="max-w-xl mt-1 text-lg text-slate-800">
-                    Upload an image to give our AI an idea of what you are looking for in terms of theming and colours
-                </p>
+            component: <div>
                 <Fileupload />
-
             </div>
         },
         {
             component: <div>
                 <TextInp />
             </div>
-        },{
+        }, {
             component: <div>
                 <SelectColour />
             </div>
@@ -44,7 +37,7 @@ export default function Gen() {
                         else
                             setQuestion(0)
                     }}>
-                        Next Step { question === 0 ? "(you can skip if you want to!)" : ""}
+                        Next Step {question === 0 ? "(you can skip if you want to!)" : ""}
                     </Button>
                 </div>
             </div>

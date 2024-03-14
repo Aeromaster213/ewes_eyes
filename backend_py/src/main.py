@@ -5,9 +5,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
+from src.utils import image_utils 
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Load the ML model
+model = image_utils.load_model()  # Call the load_model function
 
 # Function to create and return FastAPI app
 def create_app():
@@ -33,9 +37,13 @@ def create_app():
     # Mount the text routes under the '/api' prefix
     app.include_router(text_routes.router, prefix="/api")
 
-
-
     return app
+
+
+# Function to get the loaded model
+def get_loaded_model():
+    return model
+
 
 # Run the FastAPI server
 if __name__ == "__main__":

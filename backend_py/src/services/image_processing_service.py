@@ -16,4 +16,18 @@ async def resize_image(image_path, output_file_path, width, height):
         raise e
     
 
+async def generate_color_palette(image_path):
+    # hello
+    return
+
+async def generate_image(image_path, text_prompt):
+    # hello
+    return
+
+
+
+
+
+    
+
 

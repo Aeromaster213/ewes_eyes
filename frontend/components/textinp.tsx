@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import { uploadText } from "./functions";
 
 export default function TextInp() {
     const [description, setDescription] = useState("");
@@ -10,8 +11,7 @@ export default function TextInp() {
     };
 
     const handleSubmit = () => {
-        // Handle form submission with the description data
-        console.log("Description:", description);
+        uploadText(description);
     };
 
     return (
