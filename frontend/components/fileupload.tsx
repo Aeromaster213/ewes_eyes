@@ -4,13 +4,14 @@ import { useDropzone } from 'react-dropzone';
 import { Inbox } from "lucide-react"
 import { uploadImage } from "./functions";
 
-const Fileupload = () => {
+const Fileupload = ({onSuccess, onError}) => {
     const { getRootProps, getInputProps } = useDropzone({
         maxFiles: 1,
         accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.svg'] },
         onDrop: async (acceptedFiles) => {
-            uploadImage(acceptedFiles[0])
+            uploadImage(acceptedFiles[0], onSuccess, onError)
             console.log(acceptedFiles);
+        
         }
     });
     return (

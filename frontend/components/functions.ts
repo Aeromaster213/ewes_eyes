@@ -1,6 +1,7 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
-export async function uploadImage(imageFile: File) {
+export async function uploadImage(imageFile: File, onSuccess: () => void, onError: () => void) {
     const formData = new FormData();
     formData.append('image', imageFile);
 
@@ -11,10 +12,11 @@ export async function uploadImage(imageFile: File) {
             }
         });
         console.log('Image uploaded successfully:', response.data);
-
+        onSuccess()
         // Call to upload text prompt after image upload
     } catch (error) {
-        console.error('Error uploading image:', error);
+        onError();
+        console.error('Error uploading image:: ', error);
     }
 }
 
@@ -32,7 +34,7 @@ export async function getInputColors() {
     try {
         const response = await axios.get('http://localhost:5000/api/getInputColors');
         console.log('Input colors retrieved successfully:', response.data);
-        
+
         // Call to get generated image after input colors are retrieved
         await getGeneratedImage();
         return response.data;

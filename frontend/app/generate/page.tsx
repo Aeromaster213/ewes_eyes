@@ -4,13 +4,14 @@ import Fileupload from "@/components/fileupload";
 import { Button } from "@/components/ui/button";
 import TextInp from "@/components/textinp";
 import SelectColour from "@/components/selectcolour";
+import toast from "react-hot-toast";
 
 export default function Gen() {
 
     const questions = [
         {
             component: <div>
-                <Fileupload />
+                <Fileupload onSuccess = {() => setQuestion(question + 1)} onError={() => toast.error("Error Uploading!")} />
             </div>
         },
         {
