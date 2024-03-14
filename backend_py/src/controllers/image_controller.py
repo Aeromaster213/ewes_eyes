@@ -3,7 +3,7 @@
 import os
 import time
 import asyncio
-from fastapi import HTTPException
+from fastapi import HTTPException, Response
 from fastapi.responses import JSONResponse, FileResponse
 from src.services import image_processing_service
 from src.services import text_processing_service
@@ -49,6 +49,31 @@ async def process_image():
     input_colors = await image_processing_service.generate_color_palette(uploaded_image_path)
     generated_image_path = await image_processing_service.generate_image(uploaded_image_path, text_prompt)
 
+
+async def update_image_color(color_values):
+    if not color_values:
+        raise HTTPException(status_code=400, detail="Color values are required")
+    
+    colors = []
+    for color in color_values:
+        r = color.get("r", 0)
+        g = color.get("g", 0)
+        b = color.get("b", 0)
+        colors.append([r, g, b])
+    
+    if not input_colors:
+        raise HTTPException(status_code=400, detail="Input colors are required")
+
+    if not generated_image_path:
+        raise HTTPException(status_code=400, detail="Generated image is not available")
+
+    modified_image_bytes = await image_processing_service.modify_image(
+        colors=colors,
+        input_colors=input_colors,
+        generated_image_path=generated_image_path
+    )
+
+    return Response(content=modified_image_bytes, media_type="image/jpeg")
 
 # Other unused methods
 

@@ -1,6 +1,6 @@
 # image_routes.py
 
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 from src.controllers import image_controller  # Import your image controller
 
 router = APIRouter()
@@ -20,6 +20,11 @@ async def get_input_colors():
 async def get_generated_image():
     return await image_controller.get_generated_image()
 
+@router.post("/changeColor")
+async def change_color(color_values: dict):
+    if not color_values:
+        raise HTTPException(status_code=400, detail="Color values are required")
+    return await image_controller.update_image_color(color_values)
 
 
 # Other unused endpoints

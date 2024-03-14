@@ -28,6 +28,11 @@ async def generate_image(image_path, text_prompt):
     # hello
     return image_utils.predict(get_loaded_model(), image_path, text_prompt)
 
+async def modify_image(colors, input_colors, generated_image_path):
+    # Assuming lib.transform returns the modified image as bytes
+    modified_image_bytes = lib.transform(generated_image_path, input_colors, colors)
+    return modified_image_bytes
+
 
 
 
