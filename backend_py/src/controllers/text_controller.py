@@ -1,28 +1,27 @@
-# text_routes.py
+# text_controller.py
 
 import os
-from fastapi import APIRouter, Path, Query, HTTPException, Body 
+from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+from src.services import text_processing_service
 
-from src.controllers import text_controller  # Assuming a text controller exists
+upload_dir = os.path.join(os.path.dirname(__file__), '../../public/uploads')
+download_dir = os.path.join(os.path.dirname(__file__), '../../public/downloads')
 
-router = APIRouter()
+uploaded_text_path = ''  # Variable to store the text prompt
 
-# Define endpoints
+async def upload_text(text_prompt):
+    global uploaded_text_path
+    filename = f'text_prompt.txt'
+    uploaded_text_path = os.path.join(upload_dir, filename)
+    with open(uploaded_text_path, "w") as text_file:
+        text_file.write(text_prompt)
+    return JSONResponse(content={"status": "OK"})
 
-@router.post("/processText")  # Example for processing text input
-async def process_text(text: str = Body(...)):
-    return await text_controller.process_text(text)
-
-@router.get("/retrieveText")  # Example for retrieving text data
-async def retrieve_text(query: str = Query(...)):  # Assuming query-based retrieval
-    return await text_controller.retrieve_text(query)
-
-@router.post("/saveText/{filename}")
-async def save_text(filename: str = Path(..., min_length=1), text: str = Body(...)):
-    # Validate input to prevent potential filename-related vulnerabilities
-    if not filename.isalnum() or os.path.exists(filename):
-        raise HTTPException(status_code=400, detail="Invalid filename")
-
-    # Call the text controller to handle saving
-    await text_controller.save_text(filename, text)
-    return {"message": f"Text saved successfully to {filename}"}
+async def retrieve_text():
+    global uploaded_text_path
+    if not uploaded_text_path or not os.path.exists(uploaded_text_path):
+        raise HTTPException(status_code=404, detail="Text prompt not found")
+    with open(uploaded_text_path, "r") as text_file:
+        text_prompt = text_file.read()
+    return JSONResponse(content={"textPrompt": text_prompt})
