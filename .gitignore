@@ -1,2 +1,4 @@
 # Ignore all __pycache__ directories
 **/__pycache__/
+backend_py/src/model/cache/*
+**/.ipynb_checkpoints/
