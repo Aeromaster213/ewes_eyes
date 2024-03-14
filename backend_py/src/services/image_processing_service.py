@@ -14,3 +14,6 @@ async def resize_image(image_path, output_file_path, width, height):
     except Exception as e:
         print(f'Error resizing image: {e}')
         raise e
+    
+
+

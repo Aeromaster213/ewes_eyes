@@ -30,6 +30,8 @@ def create_app():
     # Mount the image routes under the '/api' prefix
     app.include_router(image_routes.router, prefix="/api")
 
+    
+
     return app
 
 # Run the FastAPI server
