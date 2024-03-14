@@ -10,7 +10,7 @@ const Fileupload = ({onSuccess, onError}) => {
         accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.svg'] },
         onDrop: async (acceptedFiles) => {
             uploadImage(acceptedFiles[0], onSuccess, onError)
-            console.log(acceptedFiles);
+            console.log(acceptedFiles[0]);
         
         }
     });

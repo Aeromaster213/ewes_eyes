@@ -6,9 +6,10 @@ export async function uploadImage(imageFile: File, onSuccess: () => void, onErro
     formData.append('image', imageFile);
 
     try {
-        const response = await axios.post('http://localhost:5000/api/uploadImage', formData, {
+        const response = await axios.post('http://localhost:8000/api/uploadImage', formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                // 'Content-Type': 'multipart/form-data'
+                'Content-Type' : imageFile.type
             }
         });
         console.log('Image uploaded successfully:', response.data);
@@ -22,7 +23,7 @@ export async function uploadImage(imageFile: File, onSuccess: () => void, onErro
 
 export async function getGeneratedImage() {
     try {
-        const response = await axios.get('http://localhost:5000/api/getGeneratedImage');
+        const response = await axios.get('http://localhost:8000/api/getGeneratedImage');
         console.log('Generated image retrieved successfully:', response.data);
     } catch (error) {
         console.error('Error getting generated image:', error);
@@ -32,7 +33,7 @@ export async function getGeneratedImage() {
 export async function getInputColors() {
 
     try {
-        const response = await axios.get('http://localhost:5000/api/getInputColors');
+        const response = await axios.get('http://localhost:8000/api/getInputColors');
         console.log('Input colors retrieved successfully:', response.data);
 
         // Call to get generated image after input colors are retrieved
@@ -45,7 +46,7 @@ export async function getInputColors() {
 
 export async function uploadText(prompt) {
     try {
-        const response = await axios.post('http://localhost:5000/api/uploadText', { prompt });
+        const response = await axios.post('http://localhost:8000/api/uploadText', prompt);
         console.log('Text prompt uploaded successfully:', response.data);
 
         // Call to get input colors after text prompt upload

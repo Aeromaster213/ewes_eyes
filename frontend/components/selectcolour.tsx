@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ColourCard from "./colourCard";
+import { getInputColors } from "./functions";
 
 // Input array containing 180 objects
 const colorsArray = require("../color.json");
@@ -39,6 +40,9 @@ function selectArrays() {
 export default function SelectColour() {
     const [selectedCardIndex, setSelectedCardIndex] = useState(null);
     const [colors, setColors] = useState([]);
+    const [userColor, setUserColor] = useState([{r: 255, g:255, b:255},{r: 255, g:255, b:255},{r: 255, g:255, b:255},{r: 255, g:255, b:255}]);
+
+
 
     useEffect(() => {
         // Generate the colors array once when the component mounts
@@ -52,7 +56,7 @@ export default function SelectColour() {
     return (
         <div className="grid grid-cols-4 grid-rows-3 gap-3">
             <div className="col-start-1 col-end-5 flex flex-col items-center justify-center row-start-1 row-end-2" style={{ border: selectedCardIndex === -1 ? "2px solid black" : "none" }} onClick={() => handleCardClick(-1)}>
-                <ColourCard colours={[{ r: 125, g: 125, b: 125 }, { r: 200, g: 200, b: 200 }, { r: 12, g: 45, b: 34 }, { r: 125, g: 125, b: 125 }]} />
+                <ColourCard colours={userColor} />
                 <p>These are the colours of your existing GUI</p>
             </div>
             {colors.map((colours, index) => (
