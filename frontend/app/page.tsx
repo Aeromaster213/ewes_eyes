@@ -12,7 +12,7 @@ export default function Home() {
       <Navigation />
       <GoogleGeminiEffectDemo />
       <BentoGridDemo />
-      <About />
+      <About id="about" />
     </main>
   );
 }
