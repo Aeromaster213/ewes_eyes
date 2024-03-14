@@ -19,6 +19,7 @@ uploaded_image_path = ''  # Variable to store the uploaded image path
 text_prompt = ''  # Variable to store the text prompt
 input_colors = []  # Variable to store the input colors
 generated_image_path = ''  # Variable to store the generated image path
+generated_image = None  # Variable to store the generated image
 
 async def upload_image(image):
     global uploaded_image_path
@@ -36,18 +37,26 @@ async def get_input_colors():
     return JSONResponse(content={"inputColors": input_colors})
 
 async def get_generated_image():
-    global generated_image_path
-    while not generated_image_path:
+    global generated_image_path, generated_image
+    while not generated_image:
         await asyncio.sleep(1)  # Wait until generated image is available
+
+    generated_image_path = os.path.join(download_dir, 'generated_image.jpg')  # Assuming it's a JPEG image
+    generated_image.save(generated_image_path)
+
+    # Read the saved image and return it as bytes
+    with open(generated_image_path, 'rb') as f:
+        image_bytes = f.read()
+
     # Determine the media type based on the file extension
     media_type = "image/jpeg" if generated_image_path.endswith(".jpg") else "image/png"
-    return FileResponse(path=generated_image_path, media_type=media_type)
+    return Response(content=image_bytes, media_type=media_type)
 
 async def process_image():
-    global input_colors, generated_image_path, text_prompt
+    global input_colors, generated_image, text_prompt
     text_prompt = await text_processing_service.get_text_prompt()
     input_colors = await image_processing_service.generate_color_palette(uploaded_image_path)
-    generated_image_path = await image_processing_service.generate_image(uploaded_image_path, text_prompt)
+    generated_image = await image_processing_service.generate_image(uploaded_image_path, text_prompt)
 
 
 async def update_image_color(color_values):
