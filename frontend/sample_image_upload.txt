@@ -1,0 +1,64 @@
+// frontend.js
+
+// Import Axios library
+import axios from 'axios';
+
+// Function to upload image
+async function uploadImage(imageFile) {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    try {
+        const response = await axios.post('http://localhost:5000/api/uploadImage', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        console.log('Image uploaded successfully:', response.data);
+
+        // Call to upload text prompt after image upload
+        await uploadText('Your text prompt here');
+    } catch (error) {
+        console.error('Error uploading image:', error);
+    }
+}
+
+// Function to upload text prompt
+async function uploadText(prompt) {
+    try {
+        const response = await axios.post('http://localhost:5000/api/uploadText', { prompt });
+        console.log('Text prompt uploaded successfully:', response.data);
+
+        // Call to get input colors after text prompt upload
+        await getInputColors();
+    } catch (error) {
+        console.error('Error uploading text prompt:', error);
+    }
+}
+
+// Function to get input colors
+async function getInputColors() {
+    try {
+        const response = await axios.get('http://localhost:5000/api/getInputColors');
+        console.log('Input colors retrieved successfully:', response.data);
+
+        // Call to get generated image after input colors are retrieved
+        await getGeneratedImage();
+    } catch (error) {
+        console.error('Error getting input colors:', error);
+    }
+}
+
+// Function to get generated image
+async function getGeneratedImage() {
+    try {
+        const response = await axios.get('http://localhost:5000/api/getGeneratedImage');
+        console.log('Generated image retrieved successfully:', response.data);
+    } catch (error) {
+        console.error('Error getting generated image:', error);
+    }
+}
+
+// Call the uploadImage function with a sample image file
+const sampleImageFile = new File(["sample image file contents"], "sample_image.jpg", { type: "image/jpeg" });
+uploadImage(sampleImageFile);

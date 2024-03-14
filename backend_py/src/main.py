@@ -25,12 +25,15 @@ def create_app():
     )
 
     # Import and use routing files
-    from src.routes import image_routes  # Import your image routes
+    from src.routes import image_routes, text_routes  # Import your routes
 
     # Mount the image routes under the '/api' prefix
     app.include_router(image_routes.router, prefix="/api")
 
-    
+    # Mount the text routes under the '/api' prefix
+    app.include_router(text_routes.router, prefix="/api")
+
+
 
     return app
 
