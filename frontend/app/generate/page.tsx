@@ -4,7 +4,7 @@ import Fileupload from "@/components/fileupload";
 import { Button } from "@/components/ui/button";
 import TextInp from "@/components/textinp";
 import SelectColour from "@/components/selectcolour";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Gen() {
 
@@ -38,8 +38,9 @@ export default function Gen() {
                         else
                             setQuestion(0)
                     }}>
-                        Next Step {question === 0 ? "(you can skip if you want to!)" : ""}
+                        Next Step
                     </Button>
+                    <Toaster />
                 </div>
             </div>
         </div>

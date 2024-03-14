@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { uploadText } from "./functions";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function TextInp() {
     const [description, setDescription] = useState("");

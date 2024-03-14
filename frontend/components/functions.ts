@@ -50,7 +50,10 @@ export async function uploadText(prompt) {
 
         // Call to get input colors after text prompt upload
         await getInputColors();
+
+        toast.success("Description uploaded! Click Next to go to the next step");
     } catch (error) {
+        toast.error("Error uploading text prompt");
         console.error('Error uploading text prompt:', error);
     }
 }
