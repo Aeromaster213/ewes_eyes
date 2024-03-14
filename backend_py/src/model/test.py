@@ -5,9 +5,6 @@ import torch
 pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-2-1-unclip-small", torch_dtype=torch.float16)
 pipe.to("cuda")
 
-# get image
-url = "https://huggingface.co/datasets/hf-internal-testing/diffusers-images/resolve/main/stable_unclip/tarsila_do_amaral.png"
-image = load_image(url)
+image = load_image("0.jpg")
 
-# run image variation
-image = pipe(image).images[0]
+image = pipe(image, "Draw me a GUI that has a dark color pallette").images[0]
