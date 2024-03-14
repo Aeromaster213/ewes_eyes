@@ -1,7 +1,6 @@
 "use client"
 import React from "react";
 import Fileupload from "@/components/fileupload";
-import { Button } from "@/components/ui/button";
 
 export default function Gen() {
     return (
