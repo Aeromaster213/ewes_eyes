@@ -4,6 +4,7 @@ import os
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from src.services import text_processing_service
+from src.controllers import image_controller
 
 upload_dir = os.path.join(os.path.dirname(__file__), '../../public/uploads')
 download_dir = os.path.join(os.path.dirname(__file__), '../../public/downloads')
@@ -16,10 +17,12 @@ async def upload_text(text_prompt):
     uploaded_text_path = os.path.join(upload_dir, filename)
     with open(uploaded_text_path, "w") as text_file:
         text_file.write(text_prompt)
+    await image_controller.process_image()
     return JSONResponse(content={"status": "OK"})
 
 async def retrieve_text():
     global uploaded_text_path
+    uploaded_text_path = os.path.join(upload_dir, 'text_prompt.txt')
     if not uploaded_text_path or not os.path.exists(uploaded_text_path):
         raise HTTPException(status_code=404, detail="Text prompt not found")
     with open(uploaded_text_path, "r") as text_file:

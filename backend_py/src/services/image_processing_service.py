@@ -21,11 +21,12 @@ async def resize_image(image_path, output_file_path, width, height):
 async def generate_color_palette(image_path):
     # hello
     image = Image.open(image_path)
-    return lib.kmeans(image, 4)
+    result = lib.k_means(image, 4)
+    return result
 
 async def generate_image(image_path, text_prompt):
     # hello
-    return image_utils.predict(get_load_model(), image_path, text_prompt)
+    return image_utils.predict(get_loaded_model(), image_path, text_prompt)
 
 
 

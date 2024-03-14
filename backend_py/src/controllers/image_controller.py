@@ -4,7 +4,7 @@ import os
 import time
 import asyncio
 from fastapi import HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from src.services import image_processing_service
 from src.services import text_processing_service
 
@@ -26,6 +26,7 @@ async def upload_image(image):
     uploaded_image_path = os.path.join(upload_dir, filename)
     with open(uploaded_image_path, "wb") as buffer:
         buffer.write(await image.read())
+    # await process_image()
     return JSONResponse(content={"status": "OK"})
 
 async def get_input_colors():
@@ -38,7 +39,9 @@ async def get_generated_image():
     global generated_image_path
     while not generated_image_path:
         await asyncio.sleep(1)  # Wait until generated image is available
-    return JSONResponse(content={"generatedImagePath": generated_image_path})
+    # Determine the media type based on the file extension
+    media_type = "image/jpeg" if generated_image_path.endswith(".jpg") else "image/png"
+    return FileResponse(path=generated_image_path, media_type=media_type)
 
 async def process_image():
     global input_colors, generated_image_path, text_prompt

@@ -13,7 +13,7 @@ async def upload_text(text: str = Body(...)):
     return await text_controller.upload_text(text)
 
 @router.get("/retrieveText")
-async def retrieve_text(query: str = Query(...)):
-    return await text_controller.retrieve_text(query)
+async def retrieve_text():
+    return await text_controller.retrieve_text()
 
 
