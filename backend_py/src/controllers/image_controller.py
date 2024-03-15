@@ -34,20 +34,21 @@ async def upload_image(image):
     return JSONResponse(content={"status": "OK"})
 
 async def get_input_colors():
-    #global input_colors
-    #while not input_colors:
-    #    await asyncio.sleep(1)  # Wait until input colors are available
-    colors = [[134, 120, 120], [234,0,0], [178, 67, 90], [0,0,0]]
+    global input_colors
+    input_colors = await image_processing_service.generate_color_palette(uploaded_image_path)
+    while not input_colors:
+        await asyncio.sleep(1)  # Wait until input colors are available
+
+    # Convert NumPy arrays to nested lists
+    input_colors = [color.tolist() for color in input_colors]
+
+    print("Input colors :", input_colors)
+    print("Input colors type : " , type(input_colors))
+    #colors = [[134, 120, 120], [234,0,0], [178, 67, 90], [0,0,0]]
     #colors = colors.tolist() if isinstance(colors, np.ndarray) else colors
     #return JSONResponse(content={"inputColors": colors})
-    return {"inputColors": colors}
-    #global input_colors
-    #while not input_colors:
-    #    await asyncio.sleep(1)  # Wait until input colors are available
-    colors = [[134, 120, 120], [234,0,0], [178, 67, 90], [0,0,0]]
-    #colors = colors.tolist() if isinstance(colors, np.ndarray) else colors
-    #return JSONResponse(content={"inputColors": colors})
-    return {"inputColors": colors}
+    return {"inputColors": input_colors}
+    
 
 async def get_generated_image():
     global generated_image_path, generated_image
