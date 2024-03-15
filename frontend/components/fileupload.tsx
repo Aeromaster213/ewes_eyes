@@ -3,15 +3,18 @@ import React, { useState } from "react";
 import { useDropzone } from 'react-dropzone';
 import { Inbox } from "lucide-react"
 import { uploadImage } from "./functions";
+import toast from "react-hot-toast";
 
-const Fileupload = ({onSuccess, onError}) => {
+const Fileupload = ({ onSuccess, onError }) => {
     const { getRootProps, getInputProps } = useDropzone({
         maxFiles: 1,
         accept: { 'image/*': ['.png', '.jpg', '.jpeg', '.svg'] },
         onDrop: async (acceptedFiles) => {
-            uploadImage(acceptedFiles[0], onSuccess, onError)
-            console.log(acceptedFiles[0]);
-        
+            toast.promise(uploadImage(acceptedFiles[0], onSuccess, onError), {
+                loading: 'Uploading Image...',
+                success: 'Image uploaded successfully!',
+                error: 'Error uploading image'
+            })
         }
     });
     return (
@@ -35,7 +38,8 @@ const Fileupload = ({onSuccess, onError}) => {
                         <p className="mt-1 text-xs text-slate-400">PNG, JPG, JPEG, SVG accepted</p>
                     </>
                 </div>
-            </div></div>
+            </div>
+        </div>
     )
 }
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ColourCard from "./colourCard";
-import { getInputColors } from "./functions";
+import { changeColour, getInputColors } from "./functions";
 import { Button } from "./ui/button";
+import toast from "react-hot-toast";
 
 // Input array containing 180 objects
 const colorsArray = require("../color.json");
@@ -38,10 +39,10 @@ function selectArrays() {
     return selectedArrays;
 }
 
-export default function SelectColour({onSuccess, onError}) {
+export default function SelectColour({ onSuccess, onError }) {
     const [selectedCardIndex, setSelectedCardIndex] = useState(null);
     const [colors, setColors] = useState([]);
-    const [userColor, setUserColor] = useState([{r: 255, g:255, b:255},{r: 255, g:255, b:255},{r: 255, g:255, b:255},{r: 255, g:255, b:255}]);
+    const [userColor, setUserColor] = useState([{ r: 255, g: 255, b: 255 }, { r: 255, g: 255, b: 255 }, { r: 255, g: 255, b: 255 }, { r: 255, g: 255, b: 255 }]);
     const [selectedColor, setSelectedColor] = useState([]);
 
 
@@ -62,14 +63,14 @@ export default function SelectColour({onSuccess, onError}) {
             console.log("this is the input: ", arrayOfObjects);
         });
     }, []);
-    
+
 
     const handleCardClick = (index) => {
         setSelectedCardIndex(index);
-        if(index === -1){
+        if (index === -1) {
             const array = userColor.map((obj => [obj.r, obj.g, obj.b]));
             setSelectedColor(array);
-        }else {
+        } else {
             const array = colors[index].map((obj => [obj.r, obj.g, obj.b]));
             setSelectedColor(array);
         }
@@ -86,7 +87,13 @@ export default function SelectColour({onSuccess, onError}) {
                     <ColourCard colours={colours} />
                 </div>
             ))}
-            <Button className="col-start-2 col-end-4" onClick={() => } >Submit Colour</Button>
+            <Button className="col-start-2 col-end-4" onClick={() => {
+                toast.promise(changeColour(selectedColor, onSuccess, onError), {
+                    loading: 'Changing Colour...',
+                    success: 'Colour changed successfully!',
+                    error: 'Error changing colour'
+                })
+            }}>Submit Colour</Button>
         </div>
     );
 }
