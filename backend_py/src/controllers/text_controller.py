@@ -1,7 +1,8 @@
 # text_controller.py
 
 import os
-from fastapi import HTTPException
+import asyncio
+from fastapi import HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse
 from src.services import text_processing_service
 from src.controllers import image_controller
@@ -11,13 +12,15 @@ download_dir = os.path.join(os.path.dirname(__file__), '../../public/downloads')
 
 uploaded_text_path = ''  # Variable to store the text prompt
 
-async def upload_text(text_prompt):
+async def upload_text(text_prompt: str):
     global uploaded_text_path
     filename = f'text_prompt.txt'
     uploaded_text_path = os.path.join(upload_dir, filename)
     with open(uploaded_text_path, "w") as text_file:
         text_file.write(text_prompt)
-    await image_controller.process_image()
+    # Start image processing in the background
+    # background_tasks = BackgroundTasks()
+    # background_tasks.add_task(image_controller.process_image)
     return JSONResponse(content={"status": "OK"})
 
 async def retrieve_text():

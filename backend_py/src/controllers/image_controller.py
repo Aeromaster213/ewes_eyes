@@ -51,6 +51,7 @@ async def get_input_colors():
 
 async def get_generated_image():
     global generated_image_path, generated_image
+    await process_image()
     while not generated_image:
         await asyncio.sleep(1)  # Wait until generated image is available
 
