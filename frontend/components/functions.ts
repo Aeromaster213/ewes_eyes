@@ -24,10 +24,27 @@ export async function uploadImage(imageFile: File, onSuccess: () => void, onErro
 
 export async function getGeneratedImage() {
     try {
-        const response = await axios.get('http://localhost:8000/api/getGeneratedImage');
-        console.log('Generated image retrieved successfully:', response.data);
+        const response = await axios.get('http://localhost:8000/api/getGeneratedImage', {
+            responseType: 'arraybuffer'
+        });
+        const binary = Buffer.from(response.data, 'binary').toString('base64');
+        return response.data;    
     } catch (error) {
         console.error('Error getting generated image:', error);
+        throw error;
+    }
+}
+
+export async function getUpdatedimage() {
+    try {
+        const response = await axios.get('http://localhost:8000/api/getUpdatedImage', {
+            responseType: 'arraybuffer'
+        });
+        const binary = Buffer.from(response.data, 'binary').toString('base64');
+        return response.data;
+    }
+    catch ( error ){
+        throw error;
     }
 }
 
@@ -70,3 +87,4 @@ export async function changeColour(colour, onSuccess: () => void, onError: () =>
         throw error;
     }
 }
+

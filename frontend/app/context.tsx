@@ -11,7 +11,12 @@ export const useColorContext = () => {
 // Step 2: Create a provider component
 export const ColorProvider = ({ children }) => {
   // State for colors
-  const [colors, setColors] = useState([]);
+  const [colors, setColors] = useState({colors: [
+    {r:255, g:255, b:255},
+    {r:255, g:255, b:255},
+    {r:255, g:255, b:255},
+    {r:255, g:255, b:255},
+  ]});
 
   // Step 3: Pass state and any necessary functions as values to the context provider
   const value = {
