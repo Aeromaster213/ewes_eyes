@@ -23,9 +23,11 @@ export async function uploadImage(imageFile: File, onSuccess: () => void, onErro
 
 export async function getGeneratedImage() {
     try {
+        toast.loading("getting image!")
         const response = await axios.get('http://localhost:8000/api/getGeneratedImage');
         console.log('Generated image retrieved successfully:', response.data);
     } catch (error) {
+        toast.error("could not get image")
         console.error('Error getting generated image:', error);
     }
 }
@@ -37,24 +39,23 @@ export async function getInputColors() {
         console.log('Input colors retrieved successfully:', response.data);
 
         // Call to get generated image after input colors are retrieved
-        await getGeneratedImage();
+        // await getGeneratedImage();
         return response.data;
     } catch (error) {
         console.error('Error getting input colors:', error);
     }
 }
 
-export async function uploadText(prompt) {
+export async function uploadText(prompt,onSuccess: () => void, onError: () => void) {
     try {
         const response = await axios.post('http://localhost:8000/api/uploadText', prompt);
         console.log('Text prompt uploaded successfully:', response.data);
 
         // Call to get input colors after text prompt upload
         await getInputColors();
-
-        toast.success("Description uploaded! Click Next to go to the next step");
+        onSuccess()
     } catch (error) {
-        toast.error("Error uploading text prompt");
+        onError();
         console.error('Error uploading text prompt:', error);
     }
 }

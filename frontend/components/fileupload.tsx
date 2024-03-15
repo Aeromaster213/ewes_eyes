@@ -15,7 +15,7 @@ const Fileupload = ({onSuccess, onError}) => {
         }
     });
     return (
-        <div>
+        <div className="bg-white bg-opacity-70 rounded-xl border-r-2 p-10">
             <div className="flex items-center flex-col text-center">
                 <h1 className="mr-3 text-5xl font-semibold">Upload a Reference Image</h1>
             </div>
