@@ -8,6 +8,8 @@ import { changeColour, getGeneratedImage, getUpdatedimage } from "@/components/f
 import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
 import { RotateCcw } from "lucide-react";
+import { MultiStepLoader } from "@/components/ui/multi-step-loader";
+import { text } from "stream/consumers";
 const colorsArray = require("@/color.json");
 
 function shuffleArray(array) {
@@ -22,7 +24,7 @@ function selectArrays() {
     const shuffledColors = shuffleArray([...colorsArray]);
     const selectedArrays = [];
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 500; i++) {
         const selectedObjects = [];
         while (selectedObjects.length < 4) {
             const randomIndex = Math.floor(Math.random() * shuffledColors.length);
@@ -37,6 +39,18 @@ function selectArrays() {
     return selectedArrays;
 }
 
+const loadingStates = [
+    {
+        text: "Uploading Image"
+    },
+    {
+        text: "Generating UI"
+    },
+    {
+        text: "Retrieving Image"
+    },
+]
+
 export default function Final() {
     const onSuccess = () => {
         console.log("Success");
@@ -49,7 +63,7 @@ export default function Final() {
     const [selectedCardIndex, setSelectedCardIndex] = useState(null);
     const [selectedColor, setSelectedColor] = useState(colors.colors);
     const [imageData, setImageData] = useState(null);
-
+    const [loading, setLoading] = useState(false);
     const handleCardClick = async (index) => {
         setSelectedCardIndex(index);
         setSelectedColor(optionColours[index]);
@@ -59,7 +73,8 @@ export default function Final() {
                 success: "Colour Changed!",
                 error: "Error changing colour",
             });
-            const img = await getUpdatedimage();
+            setLoading(true)
+            const img = await getUpdatedimage().finally(() => setLoading(false));
             console.log("img: ", img)
             const imageUrl = URL.createObjectURL(new Blob([img], { type: 'image/png' }));
             setImageData(imageUrl);
@@ -75,7 +90,8 @@ export default function Final() {
         setOptionColours(selectArrays());
         async function fetchImage() {
             try {
-                const img = await getGeneratedImage();
+                setLoading(true)
+                const img = await getGeneratedImage().finally(() => setLoading(false));
                 console.log("img: ", img)
                 const imageUrl = URL.createObjectURL(new Blob([img], { type: 'image/png' }));
                 setImageData(imageUrl);
@@ -92,15 +108,18 @@ export default function Final() {
         <main>
             <Navigation />
             <div className="w-screen h-screen bg-gradient-to-r from-rose-100 to-teal-100 text-black">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <div className="grid grid-cols-2 grid-row-5 bg-white bg-opacity-70 p-10 rounded-xl gap-3">
-                        <div className="col-start-1 col-end-2 row-start-1 row-end-5">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-10">
+                    <div className="grid grid-cols-2 grid-row-6 bg-white bg-opacity-70 p-10 rounded-xl gap-3">
+                        <div className="col-start-1 col-end-3 row-start-1 row-end-2">
+                            <h1 className="text-4xl font-semibold text-center">This is the Generated UI</h1>
+                        </div>
+                        <div className="col-start-1 col-end-2 row-start-2 row-end-6">
                             {imageData ? (
                                 <Image
                                     src={`${imageData}`}
                                     alt="generated image"
-                                    height={200}
-                                    width={200}
+                                    height={300}
+                                    width={300}
                                 />
                             ) :
                                 <div className="flex flex-col items-center justify-center p-10">
@@ -113,22 +132,22 @@ export default function Final() {
                                     transform: rotate(0deg);
                                 }
                                 100% {
-                                    transform:rotate(360deg);
+                                    transform:rotate(-360deg);
                                 }
                             }
                         `}</style>
                                 </div>
-
-
                             }
+                            <MultiStepLoader loading={loading} duration={5000} loadingStates={loadingStates} />
+
                         </div>
-                        <div className="col-start-1 col-end-2 row-start-5 row-end-6">
+                        <div className="col-start-1 col-end-2 row-start-6 row-end-7">
                             <div className="flex flex-col items-center justify-center h-full w-full">
                                 <ColourCard colours={selectedColor} />
                                 <h1>The Selected Color</h1>
                             </div>
                         </div>
-                        <div className="col-start-2 col-end-3 row-start-1 row-end-6" style={{ maxHeight: "500px", overflowY: "auto" }}>
+                        <div className="col-start-2 col-end-3 row-start-2 row-end-7" style={{ maxHeight: "700px", overflowY: "auto" }}>
                             {optionColours.map((colours, index) => (
                                 <div
                                     key={index}
