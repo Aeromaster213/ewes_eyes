@@ -6,27 +6,18 @@ import toast from "react-hot-toast";
 
 export default function TextInp({onSuccess, onError}) {
     const [description, setDescription] = useState("");
-    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setDescription(e.target.value);
     };
 
     const handleSubmit = () => {
-        setLoading(true);
-        uploadText(description).then(() => {
-            setLoading(false);
-        });        
+        toast.promise(uploadText(description, onSuccess, onError), {
+            loading: 'Uploading Text...',
+            success: 'Text uploaded successfully!',
+            error: 'Error uploading text'
+        })
     };
-
-    useEffect(() => {
-        if (loading) {
-            toast.loading("Uploading description...");
-        } else {
-            toast.dismiss();
-        }
-    
-    }, [loading])
 
     return (
         <div className="flex flex-col items-center justify-center gap-4 p-10 bg-white bg-opacity-70 rounded-xl border-r-2">

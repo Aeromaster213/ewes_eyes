@@ -21,19 +21,10 @@ export default function Gen() {
             </div>
         }, {
             component: <div>
-                <SelectColour />
+                <SelectColour onSuccess={() => router.push("/final")} onError={() => toast.error("Error")} />
             </div>
         }
     ]
-
-    const [allowNext, setAllowNext] = useState(false);
-
-    const handleClick = () => {
-        if (allowNext) {
-            setAllowNext(false);
-            setQuestion(question + 1);
-        }
-    }
 
     const [question, setQuestion] = useState(0);
     const router = useRouter();
