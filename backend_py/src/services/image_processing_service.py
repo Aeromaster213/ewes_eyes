@@ -33,7 +33,7 @@ async def modify_image(colors, input_colors, generated_image_path):
     # Read the image from the provided path
     with Image.open(generated_image_path) as image:
         # Assuming lib.transform returns the modified image as Pillow Image
-        modified_image = lib.transform(image, input_colors, colors)
+        modified_image = lib.transform_interpolate(image, input_colors, colors)
     
     # Convert the modified image to bytes
     with io.BytesIO() as output:

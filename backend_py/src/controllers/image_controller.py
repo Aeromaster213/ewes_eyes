@@ -102,7 +102,7 @@ async def get_updated_image():
     if not input_colors:
         raise HTTPException(status_code=400, detail="Input colors are required")
     
-    generated_image_path = uploaded_image_path  # Assuming the generated image is the same as the uploaded image for testing
+    #generated_image_path = uploaded_image_path  # Assuming the generated image is the same as the uploaded image for testing
 
     if not generated_image_path:
         raise HTTPException(status_code=400, detail="Generated image is not available")
