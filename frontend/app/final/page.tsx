@@ -8,7 +8,7 @@ export default function Final() {
         <main>
             <Navigation />
             <div className="w-screen h-screen bg-black">
-
+                
             </div>
             <About id="about" />
         </main>

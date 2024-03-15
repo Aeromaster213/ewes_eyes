@@ -16,8 +16,9 @@ export async function uploadImage(imageFile: File, onSuccess: () => void, onErro
         onSuccess()
         // Call to upload text prompt after image upload
     } catch (error) {
-        onError();
+        // onError();
         console.error('Error uploading image:: ', error);
+        throw error;
     }
 }
 
@@ -49,15 +50,19 @@ export async function uploadText(prompt, onSuccess: () => void, onError: () => v
         // Call to get input colors after text prompt upload
         await getInputColors();
         onSuccess()
+        return response.data;
     } catch (error) {
-        onError();
+        // onError();
         console.error('Error uploading text prompt:', error);
+        throw error;
     }
 }
 
 export async function changeColour(colour, onSuccess: () => void, onError: () => void){
+    const c = JSON.stringify(colour)
+    console.log(c)
     try {
-        const response = await axios.post('http://localhost:8000/api/changeColor', colour);
+        const response = await axios.post('http://localhost:8000/api/changeColor', JSON.stringify(colour));
         console.log('Color changed successfully:', response.data);
     } catch (error) {
         toast.error("could not change colour")

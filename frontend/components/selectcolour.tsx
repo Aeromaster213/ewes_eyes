@@ -3,6 +3,7 @@ import ColourCard from "./colourCard";
 import { changeColour, getInputColors } from "./functions";
 import { Button } from "./ui/button";
 import toast from "react-hot-toast";
+import { useColorContext } from "@/app/context";
 
 // Input array containing 180 objects
 const colorsArray = require("../color.json");
@@ -43,7 +44,8 @@ export default function SelectColour({ onSuccess, onError }) {
     const [selectedCardIndex, setSelectedCardIndex] = useState(null);
     const [colors, setColors] = useState([]);
     const [userColor, setUserColor] = useState([{ r: 255, g: 255, b: 255 }, { r: 255, g: 255, b: 255 }, { r: 255, g: 255, b: 255 }, { r: 255, g: 255, b: 255 }]);
-    const [selectedColor, setSelectedColor] = useState([]);
+    const [selectedColor, setSelectedColor] = useState({});
+    const {colors: contextColors, setColors: setContextColors} = useColorContext();
 
 
 
@@ -68,11 +70,9 @@ export default function SelectColour({ onSuccess, onError }) {
     const handleCardClick = (index) => {
         setSelectedCardIndex(index);
         if (index === -1) {
-            const array = userColor.map((obj => [obj.r, obj.g, obj.b]));
-            setSelectedColor(array);
+            setSelectedColor({colors: userColor});
         } else {
-            const array = colors[index].map((obj => [obj.r, obj.g, obj.b]));
-            setSelectedColor(array);
+            setSelectedColor({colors: colors[index]});
         }
     };
 
@@ -88,6 +88,7 @@ export default function SelectColour({ onSuccess, onError }) {
                 </div>
             ))}
             <Button className="col-start-2 col-end-4" onClick={() => {
+                setContextColors(selectedColor);
                 toast.promise(changeColour(selectedColor, onSuccess, onError), {
                     loading: 'Changing Colour...',
                     success: 'Colour changed successfully!',
