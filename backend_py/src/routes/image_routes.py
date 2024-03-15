@@ -26,6 +26,10 @@ async def change_color(color_values: dict):
         raise HTTPException(status_code=400, detail="Color values are required")
     return await image_controller.update_image_color(color_values)
 
+@router.get("/getUpdatedImage")
+async def get_updated_image():
+    return await image_controller.get_updated_image()
+
 
 # Other unused endpoints
 

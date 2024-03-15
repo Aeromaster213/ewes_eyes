@@ -8,7 +8,6 @@ from fastapi.responses import JSONResponse, FileResponse
 from src.services import image_processing_service
 from src.services import text_processing_service
 import numpy as np
-import numpy as np
 
 upload_dir = os.path.join(os.path.dirname(__file__), '../../public/uploads')
 download_dir = os.path.join(os.path.dirname(__file__), '../../public/downloads')
@@ -22,6 +21,8 @@ text_prompt = ''  # Variable to store the text prompt
 input_colors = []  # Variable to store the input colors
 generated_image_path = ''  # Variable to store the generated image path
 generated_image = None  # Variable to store the generated image
+
+new_colors = []  # Variable to store the new colors
 
 async def upload_image(image):
     global uploaded_image_path
@@ -72,6 +73,7 @@ async def process_image():
 
 
 async def update_image_color(color_values):
+    global new_colors
     if not color_values:
         raise HTTPException(status_code=400, detail="Color values are required")
 
@@ -89,6 +91,11 @@ async def update_image_color(color_values):
         colors.append([r, g, b])
 
     print("Colors:", colors)
+    new_colors = colors
+    return JSONResponse(content={"status": "OK"})
+    
+
+async def get_updated_image():
     input_colors = await image_processing_service.generate_color_palette(uploaded_image_path)
     if not input_colors:
         raise HTTPException(status_code=400, detail="Input colors are required")
@@ -99,7 +106,7 @@ async def update_image_color(color_values):
         raise HTTPException(status_code=400, detail="Generated image is not available")
 
     modified_image_bytes = await image_processing_service.modify_image(
-        colors=colors,
+        colors=new_colors,
         input_colors=input_colors,
         generated_image_path=generated_image_path
     )
