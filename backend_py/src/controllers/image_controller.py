@@ -113,5 +113,7 @@ async def get_updated_image():
         generated_image_path=generated_image_path
     )
 
-    return Response(content=modified_image_bytes, media_type="image/jpeg")
+    # Determine the media type based on the file extension
+    media_type = "image/jpeg" if generated_image_path.endswith(".jpg") else "image/png"
+    return Response(content=modified_image_bytes, media_type=media_type)
 
