@@ -7,6 +7,7 @@ from fastapi import HTTPException, Response
 from fastapi.responses import JSONResponse, FileResponse
 from src.services import image_processing_service
 from src.services import text_processing_service
+import numpy as np
 
 upload_dir = os.path.join(os.path.dirname(__file__), '../../public/uploads')
 download_dir = os.path.join(os.path.dirname(__file__), '../../public/downloads')
@@ -31,10 +32,13 @@ async def upload_image(image):
     return JSONResponse(content={"status": "OK"})
 
 async def get_input_colors():
-    global input_colors
-    while not input_colors:
-        await asyncio.sleep(1)  # Wait until input colors are available
-    return JSONResponse(content={"inputColors": input_colors})
+    #global input_colors
+    #while not input_colors:
+    #    await asyncio.sleep(1)  # Wait until input colors are available
+    colors = [[134, 120, 120], [234,0,0], [178, 67, 90], [0,0,0]]
+    #colors = colors.tolist() if isinstance(colors, np.ndarray) else colors
+    #return JSONResponse(content={"inputColors": colors})
+    return {"inputColors": colors}
 
 async def get_generated_image():
     global generated_image_path, generated_image
