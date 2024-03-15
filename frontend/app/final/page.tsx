@@ -2,8 +2,11 @@
 import { About } from "@/components/about";
 import { Navigation } from "@/components/navbar";
 import React from "react";
+import { useColorContext } from "@/app/context";
 
 export default function Final() {
+    const { colors, setColors } = useColorContext();
+    console.log(colors)
     return (
         <main>
             <Navigation />

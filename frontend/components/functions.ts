@@ -62,9 +62,11 @@ export async function changeColour(colour, onSuccess: () => void, onError: () =>
     const c = JSON.stringify(colour)
     console.log(c)
     try {
-        const response = await axios.post('http://localhost:8000/api/changeColor', JSON.stringify(colour));
+        const response = await axios.post('http://localhost:8000/api/changeColor', colour);
         console.log('Color changed successfully:', response.data);
+        onSuccess();
+        return response.data;
     } catch (error) {
-        toast.error("could not change colour")
+        throw error;
     }
 }
