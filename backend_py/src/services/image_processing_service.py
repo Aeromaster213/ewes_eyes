@@ -3,6 +3,7 @@
 import os
 import shutil
 import time
+import io
 from src.utils import lib, image_utils
 from PIL import Image
 from src.main import get_loaded_model
@@ -29,8 +30,16 @@ async def generate_image(image_path, text_prompt):
     return image_utils.predict(get_loaded_model(), image_path, text_prompt)
 
 async def modify_image(colors, input_colors, generated_image_path):
-    # Assuming lib.transform returns the modified image as bytes
-    modified_image_bytes = lib.transform(generated_image_path, input_colors, colors)
+    # Read the image from the provided path
+    with Image.open(generated_image_path) as image:
+        # Assuming lib.transform returns the modified image as Pillow Image
+        modified_image = lib.transform(image, input_colors, colors)
+    
+    # Convert the modified image to bytes
+    with io.BytesIO() as output:
+        modified_image.save(output, format='JPEG')
+        modified_image_bytes = output.getvalue()
+    
     return modified_image_bytes
 
 
