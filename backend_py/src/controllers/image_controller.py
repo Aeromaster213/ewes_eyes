@@ -7,6 +7,7 @@ from fastapi import HTTPException, Response
 from fastapi.responses import JSONResponse, FileResponse
 from src.services import image_processing_service
 from src.services import text_processing_service
+import numpy as np
 
 upload_dir = os.path.join(os.path.dirname(__file__), '../../public/uploads')
 download_dir = os.path.join(os.path.dirname(__file__), '../../public/downloads')
@@ -35,6 +36,13 @@ async def get_input_colors():
     while not input_colors:
         await asyncio.sleep(1)  # Wait until input colors are available
     return JSONResponse(content={"inputColors": input_colors})
+    #global input_colors
+    #while not input_colors:
+    #    await asyncio.sleep(1)  # Wait until input colors are available
+    colors = [[134, 120, 120], [234,0,0], [178, 67, 90], [0,0,0]]
+    #colors = colors.tolist() if isinstance(colors, np.ndarray) else colors
+    #return JSONResponse(content={"inputColors": colors})
+    return {"inputColors": colors}
 
 async def get_generated_image():
     global generated_image_path, generated_image
@@ -62,16 +70,26 @@ async def process_image():
 async def update_image_color(color_values):
     if not color_values:
         raise HTTPException(status_code=400, detail="Color values are required")
-    
+
+    # Extract the colors list from the dictionary
+    colors_list = color_values.get("colors")
+    if not colors_list:
+        raise HTTPException(status_code=400, detail="Colors list is missing or empty")
+
+    # Process each color in the list
     colors = []
-    for color in color_values:
+    for color in colors_list:
         r = color.get("r", 0)
         g = color.get("g", 0)
         b = color.get("b", 0)
         colors.append([r, g, b])
-    
+
+    print("Colors:", colors)
+    input_colors = await image_processing_service.generate_color_palette(uploaded_image_path)
     if not input_colors:
         raise HTTPException(status_code=400, detail="Input colors are required")
+    
+    generated_image_path = uploaded_image_path  # Assuming the generated image is the same as the uploaded image for testing
 
     if not generated_image_path:
         raise HTTPException(status_code=400, detail="Generated image is not available")
