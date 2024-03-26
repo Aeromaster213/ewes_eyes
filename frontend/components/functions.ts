@@ -6,7 +6,7 @@ export async function uploadImage(imageFile: File, onSuccess: () => void, onErro
     formData.append('image', imageFile);
 
     try {
-        const response = await axios.post('http://localhost:8000/api/uploadImage', formData, {
+        const response = await axios.post('http://10.23.91.240:8000/api/uploadImage', formData, {
             headers: {
                 // 'Content-Type': 'multipart/form-data'
                 'Content-Type': imageFile.type
@@ -24,7 +24,7 @@ export async function uploadImage(imageFile: File, onSuccess: () => void, onErro
 
 export async function getGeneratedImage() {
     try {
-        const response = await axios.get('http://localhost:8000/api/getGeneratedImage', {
+        const response = await axios.get('http://10.23.91.240:8000/api/getGeneratedImage', {
             responseType: 'arraybuffer'
         });
         const binary = Buffer.from(response.data, 'binary').toString('base64');
@@ -37,7 +37,7 @@ export async function getGeneratedImage() {
 
 export async function getUpdatedimage() {
     try {
-        const response = await axios.get('http://localhost:8000/api/getUpdatedImage', {
+        const response = await axios.get('http://10.23.91.240:8000/api/getUpdatedImage', {
             responseType: 'arraybuffer'
         });
         const binary = Buffer.from(response.data, 'binary').toString('base64');
@@ -51,7 +51,7 @@ export async function getUpdatedimage() {
 export async function getInputColors() {
 
     try {
-        const response = await axios.get('http://localhost:8000/api/getInputColors');
+        const response = await axios.get('http://10.23.91.240:8000/api/getInputColors');
         console.log('Input colors retrieved successfully:', response.data);
         return response.data;
     } catch (error) {
@@ -61,7 +61,7 @@ export async function getInputColors() {
 
 export async function uploadText(prompt, onSuccess: () => void, onError: () => void) {
     try {
-        const response = await axios.post('http://localhost:8000/api/uploadText', prompt);
+        const response = await axios.post('http://10.23.91.240:8000/api/uploadText', prompt);
         console.log('Text prompt uploaded successfully:', response.data);
 
         // Call to get input colors after text prompt upload
@@ -79,7 +79,7 @@ export async function changeColour(colour, onSuccess: () => void, onError: () =>
     const c = JSON.stringify(colour)
     console.log(c)
     try {
-        const response = await axios.post('http://localhost:8000/api/changeColor', colour);
+        const response = await axios.post('http://10.23.91.240:8000/api/changeColor', colour);
         console.log('Color changed successfully:', response.data);
         onSuccess();
         return response.data;
@@ -88,3 +88,16 @@ export async function changeColour(colour, onSuccess: () => void, onError: () =>
     }
 }
 
+export function getLuminosity(colour) {
+    let sum = 0;
+    colour.forEach(element => {
+        const r = element.r / 255;
+        const g = element.g / 255;
+        const b = element.b / 255;
+
+        const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        sum += lum;
+    });
+
+    return sum;
+}

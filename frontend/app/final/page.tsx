@@ -4,7 +4,7 @@ import { Navigation } from "@/components/navbar";
 import React, { useEffect, useState } from "react";
 import { useColorContext } from "@/app/context";
 import ColourCard from "@/components/colourCard";
-import { changeColour, getGeneratedImage, getUpdatedimage } from "@/components/functions";
+import { changeColour, getGeneratedImage, getUpdatedimage, getLuminosity } from "@/components/functions";
 import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
 import { RotateCcw } from "lucide-react";
@@ -12,32 +12,6 @@ import { MultiStepLoader } from "@/components/ui/multi-step-loader";
 import { text } from "stream/consumers";
 const colorsArray = require("@/color.json");
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-function selectArrays() {
-    const shuffledColors = shuffleArray([...colorsArray]);
-    const selectedArrays = [];
-
-    for (let i = 0; i < 500; i++) {
-        const selectedObjects = [];
-        while (selectedObjects.length < 4) {
-            const randomIndex = Math.floor(Math.random() * shuffledColors.length);
-            const selectedColor = shuffledColors[randomIndex];
-            if (!selectedObjects.some(obj => obj === selectedColor)) {
-                selectedObjects.push(selectedColor);
-            }
-        }
-        selectedArrays.push(selectedObjects);
-    }
-
-    return selectedArrays;
-}
 
 const loadingStates = [
     {
@@ -64,6 +38,40 @@ export default function Final() {
     const [selectedColor, setSelectedColor] = useState(colors.colors);
     const [imageData, setImageData] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const {luminosity} = useColorContext();
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function selectArrays() {
+        const shuffledColors = shuffleArray([...colorsArray]);
+        const selectedArrays = [];
+
+        for (let i = 0; selectedArrays.length < 10 && i < 500; i++) {
+            const selectedObjects = [];
+            while (selectedObjects.length < 4) {
+                const randomIndex = Math.floor(Math.random() * shuffledColors.length);
+                const selectedColor = shuffledColors[randomIndex];
+                if (!selectedObjects.some(obj => obj === selectedColor)) {
+                    selectedObjects.push(selectedColor);
+                }
+            }
+            // console.log("sel: ", selectedObjects)
+            if (getLuminosity(selectedObjects) <= luminosity){
+                console.log("this is the luminosity: ", getLuminosity(selectedObjects));
+                selectedArrays.push(selectedObjects);
+            }
+        }
+
+        return selectedArrays;
+    }
+
     const handleCardClick = async (index) => {
         setSelectedCardIndex(index);
         setSelectedColor(optionColours[index]);
@@ -108,8 +116,8 @@ export default function Final() {
         <main>
             <Navigation />
             <div className="w-screen h-screen bg-gradient-to-r from-rose-100 to-teal-100 text-black">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 mt-10">
-                    <div className="grid grid-cols-2 grid-row-6 bg-white bg-opacity-70 p-10 rounded-xl gap-3">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" >
+                    <div className="grid grid-cols-2 grid-row-6 bg-white bg-opacity-70 p-10 rounded-xl gap-3 mt-10" >
                         <div className="col-start-1 col-end-3 row-start-1 row-end-2">
                             <h1 className="text-4xl font-semibold text-center">This is the Generated UI</h1>
                         </div>
@@ -138,16 +146,16 @@ export default function Final() {
                         `}</style>
                                 </div>
                             }
-                            <MultiStepLoader loading={loading} duration={5000} loadingStates={loadingStates} />
+                            {/* <MultiStepLoader loading={loading} duration={5000} loadingStates={loadingStates} /> */}
 
                         </div>
                         <div className="col-start-1 col-end-2 row-start-6 row-end-7">
                             <div className="flex flex-col items-center justify-center h-full w-full">
-                                <ColourCard colours={selectedColor} />
+                                <ColourCard colours={selectedColor} userColor={true} />
                                 <h1>The Selected Color</h1>
                             </div>
                         </div>
-                        <div className="col-start-2 col-end-3 row-start-2 row-end-7" style={{ maxHeight: "700px", overflowY: "auto" }}>
+                        <div className="col-start-2 col-end-3 row-start-2 row-end-7" style={{ maxHeight: "500px", overflowY: "auto" }}>
                             {optionColours.map((colours, index) => (
                                 <div
                                     key={index}

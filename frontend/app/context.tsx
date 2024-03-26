@@ -18,10 +18,14 @@ export const ColorProvider = ({ children }) => {
     {r:255, g:255, b:255},
   ]});
 
+  const [luminosity, setLuminosity] = useState(100);
+
   // Step 3: Pass state and any necessary functions as values to the context provider
   const value = {
     colors,
     setColors,
+    luminosity,
+    setLuminosity,
   };
 
   return <ColorContext.Provider value={value}>{children}</ColorContext.Provider>;

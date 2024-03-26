@@ -26,7 +26,7 @@ export default function Gen() {
         }
     ]
 
-    const [question, setQuestion] = useState(0);
+    const [question, setQuestion] = useState(2);
     const router = useRouter();
     return (
         <div className="w-screen min-h-screen bg-gradient-to-r from-rose-100 to-teal-100">
