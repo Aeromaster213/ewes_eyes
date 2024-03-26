@@ -42,6 +42,9 @@ async def modify_image(colors, input_colors, generated_image_path):
     
     return modified_image_bytes
 
+async def get_luminosity(color_palette):
+    return lib.get_luminosity(color_palette)
+
 
 
 

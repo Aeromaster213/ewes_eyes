@@ -75,3 +75,11 @@ def k_means(image, k):
     centroids = kmeans.cluster_centers_
     centroids = sort(centroids)
     return centroids
+
+
+def get_luminosity(color_palette):
+    luminosities = []
+    for color in color_palette:
+        luminosity = 0.2126 * color[0] + 0.7152 * color[1] + 0.0722 * color[2]
+        luminosities.append(luminosity)
+    return luminosities

@@ -19,10 +19,12 @@ updated_image_file = ''  # Variable to store the updated image filename
 uploaded_image_path = ''  # Variable to store the uploaded image path
 text_prompt = ''  # Variable to store the text prompt
 input_colors = []  # Variable to store the input colors
+input_luminosity = []  # Variable to store the input luminosity
 generated_image_path = ''  # Variable to store the generated image path
 generated_image = None  # Variable to store the generated image
 
 new_colors = []  # Variable to store the new colors
+new_luminosity = []  # Variable to store the new luminosity
 
 async def upload_image(image):
     global uploaded_image_path
@@ -34,7 +36,7 @@ async def upload_image(image):
     return JSONResponse(content={"status": "OK"})
 
 async def get_input_colors():
-    global input_colors
+    global input_colors, input_luminosity
     input_colors = await image_processing_service.generate_color_palette(uploaded_image_path)
     while not input_colors:
         await asyncio.sleep(1)  # Wait until input colors are available
@@ -44,6 +46,9 @@ async def get_input_colors():
 
     print("Input colors :", input_colors)
     print("Input colors type : " , type(input_colors))
+
+    input_luminosity = await image_processing_service.get_luminosity(input_colors)
+    print("Input luminosity :", input_luminosity)
     #colors = [[134, 120, 120], [234,0,0], [178, 67, 90], [0,0,0]]
     #colors = colors.tolist() if isinstance(colors, np.ndarray) else colors
     #return JSONResponse(content={"inputColors": colors})
@@ -75,7 +80,7 @@ async def process_image():
 
 
 async def update_image_color(color_values):
-    global new_colors
+    global new_colors, new_luminosity
     if not color_values:
         raise HTTPException(status_code=400, detail="Color values are required")
 
@@ -94,6 +99,8 @@ async def update_image_color(color_values):
 
     print("Colors:", colors)
     new_colors = colors
+    new_luminosity = await image_processing_service.get_luminosity(new_colors)
+    print("New luminosity:", new_luminosity)
     return JSONResponse(content={"status": "OK"})
     
 
